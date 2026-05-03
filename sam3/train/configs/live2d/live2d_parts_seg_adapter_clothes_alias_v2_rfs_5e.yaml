@@ -1,0 +1,31 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_clothes_alias_rfs_5e
+  - _self_
+
+# Prompt-quality v2 run.
+# Starts from the current best clothing alias checkpoint (e2) and continues to
+# epoch 5 on a cleaner alias dataset. The v2 aliases avoid broad prompts such as
+# `anime outfit`, `top`, and `bottoms`, and emphasize concrete visible garment
+# prompts such as `bodice`, `skirt`, `upper garment`, and `lower garment`.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_clothes_alias_v2_rfs_5e
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_hair_merged_clothes_alias_v2_rfs
+
+scratch:
+  max_data_epochs: 5
+  scheduler_timescale: 5
+  scheduler_warmup: 1
+  scheduler_cooldown: 1
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 1
+
+  checkpoint:
+    save_freq: 1
+    resume_from: D:/github/sam3/runs/live2d_parts_seg_adapter_clothes_alias_rfs_5e/checkpoints/checkpoint_2.pt
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

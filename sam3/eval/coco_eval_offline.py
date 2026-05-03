@@ -11,6 +11,7 @@ we may need to split the inference process for a given image in several chunks.
 """
 
 import logging
+import json
 from collections import defaultdict
 
 import torch
@@ -42,6 +43,17 @@ COCO_METRICS = [
     "AR_medium",
     "AR_large",
 ]
+
+
+def load_coco_utf8(annotation_file):
+    """Load COCO annotations with explicit UTF-8 encoding on Windows."""
+    coco = COCO()
+    with open(annotation_file, "r", encoding="utf-8") as f:
+        dataset = json.load(f)
+    assert isinstance(dataset, dict), f"annotation file format {type(dataset)} not supported"
+    coco.dataset = dataset
+    coco.createIndex()
+    return coco
 
 
 def convert_to_xywh(boxes):
@@ -144,7 +156,7 @@ class CocoEvaluatorOfflineWithPredFileEvaluators:
             return {}
 
         logging.info("OfflineCoco evaluator: Loading groundtruth")
-        self.gt = COCO(self.gt_path)
+        self.gt = load_coco_utf8(self.gt_path)
 
         # Creating the result file
         logging.info("Coco evaluator: Creating the result file")

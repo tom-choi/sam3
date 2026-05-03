@@ -1,0 +1,22 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_clothes_alias_v2_rfs_5e
+  - _self_
+
+# Continue the prompt-quality v2 clothing run from the latest adapter checkpoint
+# to epoch 10. The run directory intentionally stays the same so comparison
+# notebooks can discover checkpoint_3.pt ... checkpoint_10.pt together.
+
+scratch:
+  max_data_epochs: 10
+  scheduler_timescale: 10
+  scheduler_warmup: 1
+  scheduler_cooldown: 1
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 1
+
+  checkpoint:
+    save_freq: 1
+    resume_from: D:/github/sam3/runs/live2d_parts_seg_adapter_clothes_alias_v2_rfs_5e/checkpoints/checkpoint.pt

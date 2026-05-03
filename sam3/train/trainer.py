@@ -209,9 +209,10 @@ class Trainer:
         set_seeds(seed_value, self.max_epochs, self.distributed_rank)
         log_env_variables()
 
-        assert is_dist_avail_and_initialized(), (
-            "Torch distributed needs to be initialized before calling the trainer."
-        )
+        if distributed.backend not in (None, "none", "disabled"):
+            assert is_dist_avail_and_initialized(), (
+                "Torch distributed needs to be initialized before calling the trainer."
+            )
 
         self._setup_components()  # Except Optimizer everything is setup here.
         self._move_to_device()
@@ -282,12 +283,20 @@ class Trainer:
                 else cuda_conf.allow_tf32
             )
 
+        if distributed_conf.backend in (None, "none", "disabled"):
+            logging.info("Skipping torch.distributed setup for single-process run.")
+            self.rank = 0
+            return
+
         self.rank = setup_distributed_backend(
             distributed_conf.backend, distributed_conf.timeout_mins
         )
 
     def _setup_device(self, accelerator):
-        self.local_rank, self.distributed_rank = get_machine_local_and_dist_rank()
+        if dist.is_available() and dist.is_initialized():
+            self.local_rank, self.distributed_rank = get_machine_local_and_dist_rank()
+        else:
+            self.local_rank, self.distributed_rank = 0, 0
         if accelerator == "cuda":
             self.device = torch.device("cuda", self.local_rank)
             torch.cuda.set_device(self.local_rank)
@@ -298,6 +307,9 @@ class Trainer:
 
     def _setup_ddp_distributed_training(self, distributed_conf, accelerator):
         assert isinstance(self.model, torch.nn.Module)
+        if not (dist.is_available() and dist.is_initialized()):
+            logging.info("Skipping DDP wrapping for single-process run.")
+            return
 
         self.model = nn.parallel.DistributedDataParallel(
             self.model,
@@ -729,7 +741,7 @@ class Trainer:
                     )
 
             if data_iter % 10 == 0:
-                dist.barrier()
+                barrier()
 
         self.est_epoch_time[phase] = batch_time.avg * iters_per_epoch
         self._log_timers(phase)
@@ -1039,10 +1051,15 @@ class Trainer:
 
             # Check that the keys match the meter keys
             if self.meters_conf is not None and phase in self.meters_conf:
-                assert set(val_keys) == set(self.meters_conf[phase].keys()), (
+                meter_keys = {
+                    key
+                    for key, meter_conf in self.meters_conf[phase].items()
+                    if meter_conf is not None
+                }
+                assert set(val_keys) == meter_keys, (
                     f"Keys in val datasets do not match the keys in meters."
-                    f"\nMissing in meters: {set(val_keys) - set(self.meters_conf[phase].keys())}"
-                    f"\nMissing in val datasets: {set(self.meters_conf[phase].keys()) - set(val_keys)}"
+                    f"\nMissing in meters: {set(val_keys) - meter_keys}"
+                    f"\nMissing in val datasets: {meter_keys - set(val_keys)}"
                 )
 
             if self.loss_conf is not None:
@@ -1099,11 +1116,15 @@ class Trainer:
         logging.info("Finished setting up components: Model, loss, optim, meters etc.")
 
     def _construct_optimizers(self):
+        trainable_param_names = {
+            name for name, param in self.model.named_parameters() if param.requires_grad
+        }
         self.optim = construct_optimizer(
             self.model,
             self.optim_conf.optimizer,
             self.optim_conf.options,
             self.optim_conf.param_group_modifiers,
+            param_allowlist=trainable_param_names,
         )
 
     def _log_loss_detailed_and_return_core_loss(self, loss, loss_str, step):

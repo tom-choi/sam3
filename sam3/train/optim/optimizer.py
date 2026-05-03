@@ -166,7 +166,11 @@ def map_scheduler_cfgs_to_param_groups(
     return schedulers, param_groups
 
 
-def validate_param_group_params(param_groups: List[Dict], model: nn.Module):
+def validate_param_group_params(
+    param_groups: List[Dict],
+    model: nn.Module,
+    param_allowlist: Optional[Set[str]] = None,
+):
     """Check that the param groups are non-overlapping and cover all the parameters.
 
     Args:
@@ -178,7 +182,11 @@ def validate_param_group_params(param_groups: List[Dict], model: nn.Module):
         # no param should be repeated within a group
         assert len(pg["params"]) == len(set(pg["params"]))
     parameters = [set(param_group["params"]) for param_group in param_groups]
-    model_parameters = {parameter for _, parameter in model.named_parameters()}
+    model_parameters = {
+        parameter
+        for name, parameter in model.named_parameters()
+        if param_allowlist is None or name in param_allowlist
+    }
     for p1, p2 in itertools.permutations(parameters, 2):
         assert p1.isdisjoint(p2), "Scheduler generated param_groups should be disjoint"
     assert set.union(*parameters) == model_parameters, (
@@ -363,7 +371,7 @@ def construct_optimizer(
         all_scheduler_cfgs, named_parameters
     )
     if validate_param_groups:
-        validate_param_group_params(param_groups, model)
+        validate_param_group_params(param_groups, model, param_allowlist)
     optimizer = hydra.utils.instantiate(optimizer_conf, param_groups)
     return Optimizer(optimizer, schedulers)
 

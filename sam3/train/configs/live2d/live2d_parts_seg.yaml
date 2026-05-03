@@ -1,0 +1,175 @@
+# @package _global_
+defaults:
+  - /configs/roboflow_v100/roboflow_v100_full_ft_100_images
+  - _self_
+
+# Fine-tune SAM3 on Live2D PSD-derived COCO instance segmentation.
+# Build the dataset with:
+#   python scripts/live2d/psd_to_coco.py --psd-root dataset/live2d_psd --output-root dataset/live2d_parts_canonical_check --taxonomy scripts/live2d/live2d_canonical_taxonomy.json --layer-overrides dataset/live2d_psd/layer_overrides.json --overwrite
+
+paths:
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_check
+  checkpoint_path: D:/github/sam3/sam3.pt
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg
+  bpe_path: D:/github/sam3/sam3/assets/bpe_simple_vocab_16e6.txt.gz
+
+roboflow_train:
+  num_images: null
+  supercategory: live2d_parts
+
+  loss:
+    _target_: sam3.train.loss.sam3_loss.Sam3LossWrapper
+    matcher: ${scratch.matcher}
+    o2m_weight: 2.0
+    o2m_matcher:
+      _target_: sam3.train.matcher.BinaryOneToManyMatcher
+      alpha: 0.3
+      threshold: 0.4
+      topk: 4
+    use_o2m_matcher_on_o2m_aux: false
+    loss_fns_find:
+      - _target_: sam3.train.loss.loss_fns.Boxes
+        weight_dict:
+          loss_bbox: 5.0
+          loss_giou: 2.0
+      - _target_: sam3.train.loss.loss_fns.IABCEMdetr
+        weak_loss: False
+        weight_dict:
+          loss_ce: 20.0
+          presence_loss: 20.0
+        pos_weight: 10.0
+        alpha: 0.25
+        gamma: 2
+        use_presence: True
+        pos_focal: false
+        pad_n_queries: 200
+        pad_scale_pos: 1.0
+      - _target_: sam3.train.loss.loss_fns.Masks
+        focal_alpha: 0.25
+        focal_gamma: 2.0
+        weight_dict:
+          loss_mask: 200.0
+          loss_dice: 10.0
+        compute_aux: false
+    loss_fn_semantic_seg: null
+    scale_by_find_batch_size: ${scratch.scale_by_find_batch_size}
+
+scratch:
+  enable_segmentation: True
+  train_batch_size: 1
+  val_batch_size: 1
+  num_train_workers: 4
+  num_val_workers: 0
+  max_data_epochs: 20
+  lr_scale: 0.05
+  scheduler_timescale: 20
+  scheduler_warmup: 20
+  scheduler_cooldown: 20
+  mask_postprocessor_thresholded:
+    _target_: sam3.eval.postprocessors.PostProcessImage
+    max_dets_per_img: -1
+    iou_type: "segm"
+    use_original_ids: true
+    use_original_sizes_box: true
+    use_original_sizes_mask: true
+    convert_mask_to_rle: True
+    detection_threshold: 0.3
+    use_presence: ${scratch.use_presence_eval}
+
+trainer:
+  skip_saving_ckpts: false
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 1
+
+  data:
+    train:
+      dataset:
+        img_folder: ${paths.live2d_root}/train/
+        ann_file: ${paths.live2d_root}/train/_annotations.coco.json
+        coco_json_loader:
+          _target_: sam3.train.data.coco_json_loaders.COCO_FROM_JSON
+          include_negatives: true
+          category_chunk_size: 30
+          _partial_: true
+      num_workers: ${scratch.num_train_workers}
+      pin_memory: True
+      collate_fn:
+        _target_: sam3.train.data.collator.collate_fn_api
+        _partial_: true
+        repeats: ${scratch.hybrid_repeats}
+        dict_key: all
+        with_seg_masks: ${scratch.enable_segmentation}
+
+    val:
+      dataset:
+        img_folder: ${paths.live2d_root}/val/
+        ann_file: ${paths.live2d_root}/val/_annotations.coco.json
+        coco_json_loader:
+          _target_: sam3.train.data.coco_json_loaders.COCO_FROM_JSON
+          include_negatives: true
+          category_chunk_size: 30
+          _partial_: true
+        transforms:
+          - _target_: sam3.train.transforms.basic_for_api.ComposeAPI
+            transforms:
+              - _target_: sam3.train.transforms.segmentation.DecodeRle
+              - _target_: sam3.train.transforms.basic_for_api.RandomResizeAPI
+                sizes: ${scratch.resolution}
+                max_size:
+                  _target_: sam3.train.transforms.basic.get_random_resize_max_size
+                  size: ${scratch.resolution}
+                square: true
+                consistent_transform: False
+              - _target_: sam3.train.transforms.basic_for_api.ToTensorAPI
+              - _target_: sam3.train.transforms.basic_for_api.NormalizeAPI
+                mean: ${scratch.train_norm_mean}
+                std: ${scratch.train_norm_std}
+      num_workers: ${scratch.num_val_workers}
+      pin_memory: True
+      collate_fn:
+        _target_: sam3.train.data.collator.collate_fn_api
+        _partial_: true
+        repeats: ${scratch.hybrid_repeats}
+        dict_key: live2d
+        with_seg_masks: ${scratch.enable_segmentation}
+
+  model:
+    checkpoint_path: ${paths.checkpoint_path}
+    load_from_HF: false
+    enable_segmentation: ${scratch.enable_segmentation}
+
+  meters:
+    val:
+      roboflow100: null
+      live2d:
+        detection:
+          _target_: sam3.eval.coco_writer.PredictionDumper
+          iou_type: "segm"
+          dump_dir: ${launcher.experiment_log_dir}/dumps/live2d
+          merge_predictions: True
+          postprocessor: ${scratch.mask_postprocessor_thresholded}
+          gather_pred_via_filesys: ${scratch.gather_pred_via_filesys}
+          maxdets: 100
+          pred_file_evaluators:
+            - _target_: sam3.eval.coco_eval_offline.CocoEvaluatorOfflineWithPredFileEvaluators
+              gt_path: ${paths.live2d_root}/val/_annotations.coco.json
+              tide: False
+              iou_type: "segm"
+
+  checkpoint:
+    save_dir: ${launcher.experiment_log_dir}/checkpoints
+    save_freq: 1
+
+  logging:
+    log_dir: ${launcher.experiment_log_dir}/logs/live2d
+
+launcher:
+  num_nodes: 1
+  gpus_per_node: 1
+  experiment_log_dir: ${paths.experiment_log_dir}
+
+submitit:
+  use_cluster: False
+  job_array:
+    num_tasks: 0
+    task_index: 0

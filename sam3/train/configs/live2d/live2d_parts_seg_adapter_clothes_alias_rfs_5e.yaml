@@ -1,0 +1,44 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_clothes_parent_rfs_15e
+  - _self_
+
+# Clothing alias supervision experiment.
+# The train split duplicates clothing masks under prompt aliases such as
+# `skirt`, `bodice`, `outfit`, and `anime outfit`. The lower learning rate is
+# intentional: base SAM3 already understands many clothing words, so this run
+# should nudge the adapter toward the Live2D masks without washing out the base.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_clothes_alias_rfs_5e
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_hair_merged_clothes_alias_rfs
+
+scratch:
+  max_data_epochs: 5
+  scheduler_timescale: 5
+  scheduler_warmup: 1
+  scheduler_cooldown: 1
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 1
+
+  checkpoint:
+    save_freq: 1
+
+  optim:
+    options:
+      lr:
+        - scheduler:
+            _target_: sam3.train.optim.schedulers.InverseSquareRootParamScheduler
+            base_lr: 2e-6
+            timescale: 5
+            warmup_steps: 1
+            cooldown_steps: 1
+      weight_decay:
+        - scheduler:
+            _target_: fvcore.common.param_scheduler.ConstantParamScheduler
+            value: 0.0
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

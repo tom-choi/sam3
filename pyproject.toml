@@ -77,6 +77,10 @@ train = [
     "scikit-image",
     "scikit-learn",
 ]
+live2d = [
+    "psd-tools",
+    "pycocotools",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/facebookresearch/sam3"

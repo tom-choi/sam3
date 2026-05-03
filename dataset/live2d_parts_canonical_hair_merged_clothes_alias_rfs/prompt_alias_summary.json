@@ -1,0 +1,191 @@
+{
+  "test": {
+    "images": 2,
+    "annotations": 21,
+    "categories": 21,
+    "added_categories": 0,
+    "added_annotations": 0
+  },
+  "train": {
+    "images": 28,
+    "annotations": 704,
+    "categories": 45,
+    "added_categories": 24,
+    "added_annotations": 372,
+    "alias_categories": [
+      {
+        "id": 22,
+        "name": "clothing",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 23,
+        "name": "outfit",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 24,
+        "name": "anime outfit",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 25,
+        "name": "character clothes",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 26,
+        "name": "costume",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 27,
+        "name": "dress",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 28,
+        "name": "uniform",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 29,
+        "name": "garment",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 30,
+        "name": "apparel",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "clothes"
+      },
+      {
+        "id": 31,
+        "name": "jacket",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 32,
+        "name": "shirt",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 33,
+        "name": "blouse",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 34,
+        "name": "top",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 35,
+        "name": "bodice",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 36,
+        "name": "collar",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 37,
+        "name": "sleeve",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 38,
+        "name": "dress top",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 39,
+        "name": "upper outfit",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "upper clothes"
+      },
+      {
+        "id": 40,
+        "name": "skirt",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      },
+      {
+        "id": 41,
+        "name": "dress skirt",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      },
+      {
+        "id": 42,
+        "name": "pants",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      },
+      {
+        "id": 43,
+        "name": "shorts",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      },
+      {
+        "id": 44,
+        "name": "bottoms",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      },
+      {
+        "id": 45,
+        "name": "lower outfit",
+        "supercategory": "live2d_part_alias",
+        "alias_of": "lower clothes"
+      }
+    ],
+    "top_counts": {
+      "mouth": 25,
+      "face": 24,
+      "eyes": 23,
+      "ears": 22,
+      "eyebrows": 21,
+      "hair": 21,
+      "neck": 20,
+      "anime outfit": 19,
+      "apparel": 19,
+      "arms": 19,
+      "character clothes": 19,
+      "clothes": 19,
+      "clothing": 19,
+      "costume": 19,
+      "dress": 19,
+      "garment": 19,
+      "legs": 19,
+      "outfit": 19,
+      "uniform": 19,
+      "blouse": 17
+    }
+  },
+  "val": {
+    "images": 2,
+    "annotations": 24,
+    "categories": 21,
+    "added_categories": 0,
+    "added_annotations": 0
+  }
+}

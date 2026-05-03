@@ -46,7 +46,7 @@ def load_coco_and_group_by_image(json_path: str) -> Tuple[List[Dict], Dict[int, 
             - List of dicts with 'image' and 'annotations' keys
             - Dict mapping category IDs to category names
     """
-    with open(json_path, "r") as f:
+    with open(json_path, "r", encoding="utf-8") as f:
         coco = json.load(f)
 
     images = {img["id"]: img for img in coco["images"]}
@@ -292,7 +292,7 @@ class SAM3_EVAL_API_FROM_JSON_NP:
         Args:
             annotation_file (str): Path to SAM3 JSON annotation file
         """
-        with open(annotation_file, "r") as f:
+        with open(annotation_file, "r", encoding="utf-8") as f:
             data = json.load(f)
         self._image_data = data["images"]
 
@@ -373,7 +373,7 @@ class SAM3_VEVAL_API_FROM_JSON_NP:
         Args:
             annotation_file (str): Path to SAM3 video JSON annotation file
         """
-        with open(annotation_file, "r") as f:
+        with open(annotation_file, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         assert "video_np_pairs" in data, "Incorrect data format"

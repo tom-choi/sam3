@@ -1,0 +1,15 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_25e
+  - _self_
+
+# Second-pass adapter fine-tune after taxonomy alignment.
+# Uses the hair-merged 20-class canonical dataset so GT, prompt bank, and eval
+# all treat sparse front/side/back/ahoge labels as one visible hair part.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_hair_merged_25e
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_hair_merged
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

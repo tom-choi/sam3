@@ -1,0 +1,31 @@
+{
+  "clothes": [
+    "garment",
+    "visible clothing",
+    "clothing pieces",
+    "character garment",
+    "clothing",
+    "costume",
+    "dress",
+    "uniform",
+    "apparel"
+  ],
+  "upper clothes": [
+    "bodice",
+    "dress top",
+    "upper garment",
+    "shirt",
+    "blouse",
+    "jacket",
+    "coat",
+    "upper outfit"
+  ],
+  "lower clothes": [
+    "skirt",
+    "dress skirt",
+    "lower garment",
+    "pants",
+    "shorts",
+    "lower outfit"
+  ]
+}

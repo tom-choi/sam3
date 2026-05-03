@@ -1,0 +1,109 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg
+  - _self_
+
+# One-epoch smoke fine-tune for pipeline validation only.
+# It reads D:/github/sam3/sam3.pt and writes a new adapter-style checkpoint under
+# runs/live2d_smoke_ft/checkpoints. The original sam3.pt is never overwritten.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_smoke_ft
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_check
+  checkpoint_path: D:/github/sam3/sam3.pt
+  bpe_path: D:/github/sam3/sam3/assets/bpe_simple_vocab_16e6.txt.gz
+
+roboflow_train:
+  num_images: 2
+
+scratch:
+  resolution: 1008
+  train_batch_size: 1
+  val_batch_size: 1
+  num_train_workers: 0
+  num_val_workers: 0
+  max_data_epochs: 1
+  lr_scale: 0.01
+  scheduler_timescale: 2
+  scheduler_warmup: 1
+  scheduler_cooldown: 1
+
+trainer:
+  skip_saving_ckpts: false
+  skip_first_val: true
+  max_epochs: 1
+  val_epoch_freq: 1
+  accelerator: cuda
+
+  distributed:
+    backend: none
+    find_unused_parameters: true
+    gradient_as_bucket_view: true
+
+  data:
+    train:
+      enable_distributed_sampler: false
+      dataset:
+        limit_ids: ${roboflow_train.num_images}
+      num_workers: 0
+      pin_memory: false
+      drop_last: false
+
+    val:
+      enable_distributed_sampler: false
+      dataset:
+        limit_ids: 1
+      num_workers: 0
+      pin_memory: false
+      drop_last: false
+
+  model:
+    _target_: sam3.train.live2d_smoke_utils.build_live2d_smoke_model
+    bpe_path: ${paths.bpe_path}
+    device: cpu
+    eval_mode: false
+    enable_segmentation: ${scratch.enable_segmentation}
+    checkpoint_path: ${paths.checkpoint_path}
+    load_from_HF: false
+    trainable_prefixes:
+      - segmentation_head.
+
+  checkpoint:
+    save_dir: ${launcher.experiment_log_dir}/checkpoints
+    save_freq: 1
+    skip_saving_parameters:
+      - backbone.*
+      - transformer.*
+      - geometry_encoder.*
+      - dot_prod_scoring.*
+
+  logging:
+    log_dir: ${launcher.experiment_log_dir}/logs/live2d
+    log_freq: 1
+    log_scalar_frequency: 1
+
+  optim:
+    param_group_modifiers: null
+    options:
+      lr:
+        - scheduler:
+            _target_: sam3.train.optim.schedulers.InverseSquareRootParamScheduler
+            base_lr: 1e-5
+            timescale: 2
+            warmup_steps: 1
+            cooldown_steps: 1
+      weight_decay:
+        - scheduler:
+            _target_: fvcore.common.param_scheduler.ConstantParamScheduler
+            value: 0.0
+
+launcher:
+  num_nodes: 1
+  gpus_per_node: 1
+  experiment_log_dir: ${paths.experiment_log_dir}
+
+submitit:
+  use_cluster: false
+  job_array:
+    num_tasks: 0
+    task_index: 0

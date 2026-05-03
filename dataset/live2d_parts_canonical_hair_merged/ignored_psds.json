@@ -1,0 +1,52 @@
+[
+  {
+    "source_psd": "Domino_base_1/__MACOSX/Domino base 1/._Domino body base 1.psd",
+    "label": "macos_resource",
+    "note": "Skipped macOS resource-fork sidecar file."
+  },
+  {
+    "source_psd": "Domino_base_1/__MACOSX/Domino base 1/._Domino body base 2.psd",
+    "label": "macos_resource",
+    "note": "Skipped macOS resource-fork sidecar file."
+  },
+  {
+    "source_psd": "IglooVT_Chibi_Main_Base_3/__MACOSX/IglooVT Chibi Main Base 3/._Chibi main igloo psd 3.psd",
+    "label": "macos_resource",
+    "note": "Skipped macOS resource-fork sidecar file."
+  },
+  {
+    "source_psd": "RRAILab_000001/RRAILab_000001/05.RRAILab_000001_depth.psd",
+    "label": "depth_map",
+    "note": "Depth/gray map companion file, not RGB part segmentation data."
+  },
+  {
+    "source_psd": "RRAILab_000002/RRAILab_000002/05.RRAILab_000002_depth.psd",
+    "label": "depth_map",
+    "note": "Depth/gray map companion file, not RGB part segmentation data."
+  },
+  {
+    "source_psd": "RRAILab_000003/RRAILab_000003/05.RRAILab_000003_depth.psd",
+    "label": "depth_map",
+    "note": "Depth/gray map companion file, not RGB part segmentation data."
+  },
+  {
+    "source_psd": "RRAILab_000004/RRAILab_000004/05.RRAILab_000004_depth.psd",
+    "label": "depth_map",
+    "note": "Depth/gray map companion file, not RGB part segmentation data."
+  },
+  {
+    "source_psd": "立ち絵素材な中国うさぎさん_ver.1.0/棫偪奊慺嵽側拞崙偆偝偓偝傫_ver.1.0/憦娫傑偙偲幃棫偪奊慺嵽_拞崙偆偝偓_ver.1.0乮im11211471乯.psd",
+    "label": "instruction_sheet",
+    "note": "Visible composite is a black readme/terms sheet rather than a clean character render."
+  },
+  {
+    "source_psd": "立绘/狼.psd",
+    "label": "non_humanoid_illustration",
+    "note": "Pure non-humanoid illustration with decorative effects; useful only for a separate non-human taxonomy."
+  },
+  {
+    "source_psd": "練習用.psd",
+    "label": "instruction_sheet",
+    "note": "Visible composite is dominated by usage-rule text, so it is not a clean training image."
+  }
+]

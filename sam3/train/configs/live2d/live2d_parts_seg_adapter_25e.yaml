@@ -1,0 +1,63 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_smoke
+  - _self_
+
+# Longer adapter-style Live2D fine-tune over the full canonical dataset.
+# The base D:/github/sam3/sam3.pt is read-only. This run writes lightweight
+# adapter checkpoints at epochs 5, 10, 15, 20, and 25.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_25e
+
+roboflow_train:
+  num_images: null
+
+scratch:
+  max_data_epochs: 25
+  lr_scale: 0.01
+  scheduler_timescale: 25
+  scheduler_warmup: 5
+  scheduler_cooldown: 5
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 5
+
+  data:
+    train:
+      dataset:
+        limit_ids: null
+
+    val:
+      dataset:
+        limit_ids: null
+
+  model:
+    trainable_prefixes:
+      - segmentation_head.
+      - dot_prod_scoring.
+
+  checkpoint:
+    save_freq: 5
+    skip_saving_parameters:
+      - backbone.*
+      - transformer.*
+      - geometry_encoder.*
+
+  optim:
+    options:
+      lr:
+        - scheduler:
+            _target_: sam3.train.optim.schedulers.InverseSquareRootParamScheduler
+            base_lr: 8e-6
+            timescale: 25
+            warmup_steps: 5
+            cooldown_steps: 5
+      weight_decay:
+        - scheduler:
+            _target_: fvcore.common.param_scheduler.ConstantParamScheduler
+            value: 0.0
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

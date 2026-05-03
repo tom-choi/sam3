@@ -1,0 +1,636 @@
+{
+  "version": "3-clothes-parent",
+  "description": "Training canonical taxonomy for Live2D visible part segmentation with sparse hair subclasses collapsed into a single hair category. This aligns the GT taxonomy and prompt bank for early SAM3 fine-tuning, reducing repeated hair prompts and false positives. Adds a parent clothes prompt category for union masks of upper/lower clothes.",
+  "merge_notes": {
+    "hair": [
+      "hair",
+      "front hair",
+      "side hair",
+      "back hair",
+      "ahoge"
+    ],
+    "removed_categories": [
+      "front hair",
+      "side hair",
+      "back hair",
+      "ahoge"
+    ]
+  },
+  "categories": [
+    {
+      "id": 1,
+      "name": "face",
+      "aliases": [
+        "face",
+        "face skin",
+        "base face",
+        "skin face",
+        "facial color",
+        "facial line",
+        "head color",
+        "head line",
+        "顔",
+        "顔面",
+        "輪郭",
+        "轮廓",
+        "臉",
+        "脸",
+        "面部",
+        "フェイス"
+      ],
+      "patterns": [
+        "\\bface\\b",
+        "\\bfacial[ _-]*(color|line|lines?)\\b",
+        "\\bhead[ _-]*(color|line|lines?)\\b",
+        "\\bface[ _-]*skin\\b",
+        "\\bskin[ _-]*face\\b",
+        "顔面|輪郭|轮廓|面部|フェイス"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "neck",
+      "aliases": [
+        "neck",
+        "首",
+        "首元",
+        "脖子"
+      ],
+      "patterns": [
+        "\\bneck\\b",
+        "首元|首|脖子"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "eyes",
+      "aliases": [
+        "eye",
+        "eyes",
+        "eyelash",
+        "eyelashes",
+        "eye white",
+        "sclera",
+        "目",
+        "眼",
+        "白目",
+        "まぶた",
+        "瞼",
+        "睫毛",
+        "まつげ",
+        "アイライン"
+      ],
+      "patterns": [
+        "\\beyes?\\b",
+        "\\beye[ _-]*white\\b",
+        "\\bsclera\\b",
+        "\\beye(lash|lashes|lid|line)\\b",
+        "白目|まぶた|瞼|睫毛|まつげ|アイライン|目|眼"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "iris",
+      "aliases": [
+        "iris",
+        "pupil",
+        "highlight",
+        "catchlight",
+        "eye highlight",
+        "瞳",
+        "瞳孔",
+        "虹彩",
+        "ハイライト",
+        "瞳ハイライト",
+        "眼珠",
+        "高光"
+      ],
+      "patterns": [
+        "\\biris\\b",
+        "\\bpupil\\b",
+        "\\bcatchlight\\b",
+        "\\beye[ _-]*highlight\\b",
+        "\\bhighlight\\b",
+        "瞳孔|虹彩|瞳|ハイライト|眼珠|高光"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "eyebrows",
+      "aliases": [
+        "eyebrow",
+        "eyebrows",
+        "brow",
+        "眉",
+        "眉毛",
+        "まゆ",
+        "まゆげ"
+      ],
+      "patterns": [
+        "\\beye[ _-]*brows?\\b",
+        "\\bbrows?\\b",
+        "眉毛|眉|まゆげ|まゆ"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "nose",
+      "aliases": [
+        "nose",
+        "鼻",
+        "鼻子"
+      ],
+      "patterns": [
+        "\\bnose\\b",
+        "鼻子|鼻"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "mouth",
+      "aliases": [
+        "mouth",
+        "lip",
+        "lips",
+        "open mouth",
+        "inner mouth",
+        "mouse normal",
+        "口",
+        "口内",
+        "嘴",
+        "嘴巴"
+      ],
+      "patterns": [
+        "\\bmouth\\b",
+        "\\blips?\\b",
+        "(?:^| / )mouse(?:_| / |$)",
+        "口内|嘴巴|口|嘴"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "hair",
+      "aliases": [
+        "hair",
+        "anime hair",
+        "character hair",
+        "front hair",
+        "bangs",
+        "fringe",
+        "side hair",
+        "side locks",
+        "back hair",
+        "rear hair",
+        "ponytail",
+        "ahoge",
+        "hair antenna",
+        "hair base",
+        "hair shadow",
+        "?",
+        "??",
+        "髪",
+        "髮",
+        "头发",
+        "頭髮",
+        "毛髪",
+        "maegami",
+        "hair front",
+        "front l",
+        "front r",
+        "前髪",
+        "前髮",
+        "前发",
+        "前毛",
+        "瀏海",
+        "刘海",
+        "hair side",
+        "横髪",
+        "横髮",
+        "侧发",
+        "側髪",
+        "側髮",
+        "鬢",
+        "鬓",
+        "hair back",
+        "pony",
+        "ushirogami",
+        "後髪",
+        "後髮",
+        "后发",
+        "後ろ髪",
+        "ポニーテール",
+        "馬尾",
+        "马尾",
+        "antenna hair",
+        "アホ毛",
+        "呆毛"
+      ],
+      "patterns": [
+        "\\bhair\\b",
+        "\\bhair[ _-]*(base|shadow|line)\\b",
+        "毛髪|头发|頭髮|髪|髮",
+        "\\bfront[ _-]*hair\\b",
+        "\\bhair[ _-]*front\\b",
+        "\\bfront[ _-]*(l|r)\\b",
+        "\\bbangs\\b",
+        "\\bfringe\\b",
+        "前髪|前髮|前发|前毛|瀏海|刘海",
+        "\\bside[ _-]*hair\\b",
+        "\\bhair[ _-]*side\\b",
+        "\\bside[ _-]*locks?\\b",
+        "横髪|横髮|侧发|側髪|側髮|鬢|鬓",
+        "\\bback[ _-]*hair\\b",
+        "\\brear[ _-]*hair\\b",
+        "\\bhair[ _-]*back\\b",
+        "\\bpony(tail)?\\b",
+        "後ろ髪|後髪|後髮|后发|ポニーテール|馬尾|马尾",
+        "\\bahoge\\b",
+        "\\bhair[ _-]*antenna\\b",
+        "\\bantenna[ _-]*hair\\b",
+        "アホ毛|呆毛"
+      ],
+      "merge_sources": [
+        "hair",
+        "front hair",
+        "side hair",
+        "back hair",
+        "ahoge"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "upper clothes",
+      "aliases": [
+        "upper clothes",
+        "clothes upper",
+        "shirt",
+        "jacket",
+        "coat",
+        "collar",
+        "sleeve",
+        "上衣",
+        "上半身衣服",
+        "服",
+        "衣装",
+        "襟",
+        "袖",
+        "外套",
+        "衬衫",
+        "襯衫"
+      ],
+      "patterns": [
+        "\\bupper[ _-]*clothes\\b",
+        "\\bshirt\\b",
+        "\\bjacket\\b",
+        "\\bcoat\\b",
+        "\\bcollar\\b",
+        "\\bsleeves?\\b",
+        "上衣|上半身衣服|衣装|襟|袖|外套|衬衫|襯衫|服"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "lower clothes",
+      "aliases": [
+        "lower clothes",
+        "skirt",
+        "pants",
+        "shorts",
+        "bottoms",
+        "裙",
+        "裙子",
+        "褲",
+        "裤",
+        "短裤",
+        "短褲",
+        "スカート"
+      ],
+      "patterns": [
+        "\\blower[ _-]*clothes\\b",
+        "\\bskirt\\b",
+        "\\bpants\\b",
+        "\\bshorts\\b",
+        "\\bbottoms\\b",
+        "スカート|裙子|裙|褲|裤|短裤|短褲"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "arms",
+      "aliases": [
+        "arm",
+        "arms",
+        "upper arm",
+        "forearm",
+        "腕",
+        "手臂",
+        "胳膊",
+        "上腕",
+        "前腕"
+      ],
+      "patterns": [
+        "\\barms?\\b",
+        "\\bforearm\\b",
+        "\\bupper[ _-]*arm\\b",
+        "手臂|胳膊|上腕|前腕|腕"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "hands",
+      "aliases": [
+        "hand",
+        "hands",
+        "finger",
+        "fingers",
+        "palm",
+        "手",
+        "手指",
+        "掌"
+      ],
+      "patterns": [
+        "\\bhands?\\b",
+        "\\bfingers?\\b",
+        "\\bpalm\\b",
+        "手指|掌|手"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "legs",
+      "aliases": [
+        "leg",
+        "legs",
+        "thigh",
+        "knee",
+        "calf",
+        "腿",
+        "大腿",
+        "膝",
+        "小腿",
+        "脚",
+        "太もも",
+        "ふくらはぎ"
+      ],
+      "patterns": [
+        "\\blegs?\\b",
+        "\\bthigh\\b",
+        "\\bknee\\b",
+        "\\bcalf\\b",
+        "ふくらはぎ|太もも|大腿|小腿|膝|腿|脚"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "feet",
+      "aliases": [
+        "foot",
+        "feet",
+        "toe",
+        "toes",
+        "bare foot",
+        "足",
+        "足先",
+        "裸足"
+      ],
+      "patterns": [
+        "\\bfeet\\b",
+        "\\bfoot\\b",
+        "\\btoes?\\b",
+        "足先|裸足|足"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "shoes",
+      "aliases": [
+        "shoe",
+        "shoes",
+        "boot",
+        "boots",
+        "sock",
+        "socks",
+        "靴",
+        "鞋",
+        "ブーツ",
+        "襪",
+        "袜",
+        "ソックス"
+      ],
+      "patterns": [
+        "\\bshoes?\\b",
+        "\\bboots?\\b",
+        "\\bsocks?\\b",
+        "ブーツ|ソックス|靴|鞋|襪|袜"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "ears",
+      "aliases": [
+        "ear",
+        "ears",
+        "animal ears",
+        "kemomimi",
+        "けもみみ",
+        "ケモミミ",
+        "獣耳",
+        "獸耳",
+        "耳"
+      ],
+      "patterns": [
+        "\\bears?\\b",
+        "\\banimal[ _-]*ears?\\b",
+        "\\bkemomimi\\b",
+        "けもみみ|ケモミミ|獣耳|獸耳|耳"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "tail",
+      "aliases": [
+        "tail",
+        "tails",
+        "しっぽ",
+        "尻尾",
+        "尾巴",
+        "拖尾"
+      ],
+      "patterns": [
+        "\\btails?\\b",
+        "しっぽ|尻尾|尾巴|拖尾"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "accessory",
+      "aliases": [
+        "accessory",
+        "accessories",
+        "ribbon",
+        "bow",
+        "hair clip",
+        "hair ornament",
+        "hat",
+        "cap",
+        "umbrella",
+        "parasol",
+        "glasses",
+        "earring",
+        "necklace",
+        "weapon",
+        "belt",
+        "bell",
+        "choker",
+        "piercing",
+        "飾り",
+        "飾",
+        "饰品",
+        "饰",
+        "リボン",
+        "髪飾り",
+        "发饰",
+        "髮飾",
+        "帽子",
+        "油纸伞",
+        "油紙傘",
+        "傘",
+        "伞",
+        "眼鏡",
+        "眼镜",
+        "耳飾り",
+        "耳饰",
+        "首飾り",
+        "项链",
+        "武器",
+        "铃铛",
+        "鈴鐺",
+        "鈴",
+        "ベルト",
+        "チョーカー"
+      ],
+      "patterns": [
+        "\\baccessor(y|ies)\\b",
+        "\\bribbon\\b",
+        "\\bbow\\b",
+        "\\bhair[ _-]*(clip|ornament|pin)\\b",
+        "\\bhat\\b",
+        "\\bcap\\b",
+        "\\bumbrella\\b",
+        "\\bparasol\\b",
+        "\\bglasses\\b",
+        "\\bearrings?\\b",
+        "\\bnecklace\\b",
+        "\\bweapon\\b",
+        "\\bbelt\\b",
+        "\\bbell\\b",
+        "\\bchoker\\b",
+        "\\bpiercing\\b",
+        "髪飾り|髮飾|发饰|飾り|饰品|リボン|帽子|油纸伞|油紙傘|傘|伞|眼鏡|眼镜|耳飾り|耳饰|首飾り|项链|武器|铃铛|鈴鐺|鈴|ベルト|チョーカー"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "torso",
+      "aliases": [
+        "torso",
+        "body base",
+        "waist",
+        "tummy",
+        "chest",
+        "bust",
+        "breast",
+        "身体",
+        "身體",
+        "胴体",
+        "胴體",
+        "躯干",
+        "軀幹",
+        "鎖骨",
+        "锁骨",
+        "腰",
+        "股",
+        "胸",
+        "胸元",
+        "デコルテ"
+      ],
+      "patterns": [
+        "\\btorso\\b",
+        "\\bbody[ _-]*base\\b",
+        "(?:^| / )body(?: / (?:layer\\s*\\d+|body|torso|base|skin|color|line|lines?))(?: / |$)",
+        "\\bwaist\\b",
+        "\\btummy\\b",
+        "\\bchest\\b",
+        "\\bbust\\b",
+        "\\bbreast\\b",
+        "(?:^| / )(体|身体|身體|胴体|胴體|躯干|軀幹)(?: / |$)",
+        "デコルテ|胸元|鎖骨|锁骨|clavicle|腰|股|胸"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "cheek",
+      "aliases": [
+        "cheek",
+        "cheeks",
+        "blush",
+        "red face",
+        "赤面",
+        "頬",
+        "頬染め",
+        "腮红",
+        "腮紅",
+        "脸红",
+        "臉紅",
+        "チーク"
+      ],
+      "patterns": [
+        "\\bcheeks?\\b",
+        "\\bblush\\b",
+        "\\bred[ _-]*face\\b",
+        "頬染め|赤面|腮红|腮紅|脸红|臉紅|チーク|頬"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "clothes",
+      "aliases": [
+        "clothes",
+        "clothing",
+        "outfit",
+        "anime outfit",
+        "costume",
+        "dress",
+        "uniform",
+        "garment",
+        "apparel",
+        "upper and lower clothes",
+        "character clothes",
+        "衣服",
+        "衣装",
+        "服装",
+        "服飾",
+        "服飾品",
+        "衣物",
+        "上衣",
+        "裙子",
+        "キャラクター衣装"
+      ],
+      "patterns": [
+        "\\bclothes?\\b",
+        "\\bclothing\\b",
+        "\\boutfit\\b",
+        "\\bcostume\\b",
+        "\\bdress\\b",
+        "\\buniform\\b",
+        "\\bgarment\\b",
+        "\\bapparel\\b",
+        "衣服|衣装|服装|服飾|服飾品|衣物|上衣|裙子|キャラクター衣装"
+      ],
+      "parent_from": [
+        "upper clothes",
+        "lower clothes"
+      ]
+    }
+  ]
+}

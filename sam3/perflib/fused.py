@@ -3,13 +3,19 @@
 # pyre-unsafe
 
 import torch
+import torch.nn.functional as F
 
 addmm_act_op = torch.ops.aten._addmm_activation
 
 
 def addmm_act(activation, linear, mat1):
     if torch.is_grad_enabled():
-        raise ValueError("Expected grad to be disabled.")
+        y = linear(mat1)
+        if activation in [F.relu, torch.nn.ReLU]:
+            return F.relu(y)
+        if activation in [F.gelu, torch.nn.GELU]:
+            return F.gelu(y)
+        raise ValueError(f"Unexpected activation {activation}")
     self = linear.bias.detach()
     mat2 = linear.weight.detach()
     self = self.to(torch.bfloat16)

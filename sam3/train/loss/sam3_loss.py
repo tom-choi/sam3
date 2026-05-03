@@ -72,8 +72,10 @@ class Sam3LossWrapper(torch.nn.Module):
         else:
             num_boxes = targets["num_boxes"].sum().float()
         if self.normalization == "global":
-            torch.distributed.all_reduce(num_boxes)
-            num_boxes = torch.clamp(num_boxes / get_world_size(), min=1)
+            world_size = get_world_size()
+            if world_size > 1:
+                torch.distributed.all_reduce(num_boxes)
+            num_boxes = torch.clamp(num_boxes / world_size, min=1)
         elif self.normalization == "local":
             num_boxes = torch.clamp(num_boxes, min=1)
         elif self.normalization == "none":

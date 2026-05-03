@@ -1,0 +1,29 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_hair_merged_25e
+  - _self_
+
+# Third-pass candidate after threshold diagnosis.
+# Uses the hair-merged taxonomy plus an offline repeat-factor sampled train
+# split so rare Live2D parts receive more positive examples without touching
+# the original PSD-derived dataset.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_hair_merged_rfs_15e
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_hair_merged_rfs
+
+scratch:
+  max_data_epochs: 15
+  scheduler_timescale: 15
+  scheduler_warmup: 3
+  scheduler_cooldown: 3
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 5
+
+  checkpoint:
+    save_freq: 5
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

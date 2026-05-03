@@ -5,8 +5,25 @@
 """Triton kernel for euclidean distance transform (EDT)"""
 
 import torch
-import triton
-import triton.language as tl
+
+try:
+    import triton
+    import triton.language as tl
+
+    TRITON_AVAILABLE = True
+except ModuleNotFoundError:  # pragma: no cover - depends on local accelerator stack.
+    TRITON_AVAILABLE = False
+
+    class _TritonStub:
+        @staticmethod
+        def jit(fn):
+            return fn
+
+    class _TLStub:
+        constexpr = int
+
+    triton = _TritonStub()
+    tl = _TLStub()
 
 """
 Disclaimer: This implementation is not meant to be extremely efficient. A CUDA kernel would likely be more efficient.
@@ -127,6 +144,21 @@ def edt_triton(data: torch.Tensor):
         A tensor of the same shape as data containing the EDT.
         It should be equivalent to a batched version of cv2.distanceTransform(input, cv2.DIST_L2, 0)
     """
+    if not TRITON_AVAILABLE:
+        try:
+            from scipy import ndimage
+        except ModuleNotFoundError as exc:
+            raise RuntimeError(
+                "edt_triton requires Triton for CUDA tensors. Install Triton or "
+                "SciPy to use the CPU fallback."
+            ) from exc
+
+        outputs = [
+            torch.from_numpy(ndimage.distance_transform_edt(mask.cpu().numpy()))
+            for mask in data.bool()
+        ]
+        return torch.stack(outputs, dim=0).to(device=data.device, dtype=torch.float32)
+
     assert data.dim() == 3
     assert data.is_cuda
     B, H, W = data.shape

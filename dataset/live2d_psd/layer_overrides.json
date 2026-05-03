@@ -1,0 +1,218 @@
+{
+  "version": 2,
+  "description": "Manual dataset curation for Live2D humanoid part segmentation. Non-humanoid PSDs, instruction sheets, depth maps, and platform sidecar files are excluded before COCO conversion.",
+  "selection_policy": {
+    "include": "Humanoid or humanoid-adjacent character PSDs that can improve body, face, hair, clothes, limb, or accessory segmentation.",
+    "exclude": "Pure non-humanoid illustrations, depth maps, readme/terms sheets, invalid macOS resource files, and files whose visible composite is not a usable character."
+  },
+  "psds": {
+    "Domino_base_1/__MACOSX/Domino base 1/._Domino body base 1.psd": {
+      "ignore_psd": true,
+      "label": "macos_resource",
+      "note": "Resource-fork sidecar, not a real PSD."
+    },
+    "Domino_base_1/__MACOSX/Domino base 1/._Domino body base 2.psd": {
+      "ignore_psd": true,
+      "label": "macos_resource",
+      "note": "Resource-fork sidecar, not a real PSD."
+    },
+    "IglooVT_Chibi_Main_Base_3/__MACOSX/IglooVT Chibi Main Base 3/._Chibi main igloo psd 3.psd": {
+      "ignore_psd": true,
+      "label": "macos_resource",
+      "note": "Resource-fork sidecar, not a real PSD."
+    },
+    "RRAILab_000001/RRAILab_000001/05.RRAILab_000001_depth.psd": {
+      "ignore_psd": true,
+      "label": "depth_map",
+      "note": "Depth/gray map companion file, not RGB part segmentation data."
+    },
+    "RRAILab_000002/RRAILab_000002/05.RRAILab_000002_depth.psd": {
+      "ignore_psd": true,
+      "label": "depth_map",
+      "note": "Depth/gray map companion file, not RGB part segmentation data."
+    },
+    "RRAILab_000003/RRAILab_000003/05.RRAILab_000003_depth.psd": {
+      "ignore_psd": true,
+      "label": "depth_map",
+      "note": "Depth/gray map companion file, not RGB part segmentation data."
+    },
+    "RRAILab_000004/RRAILab_000004/05.RRAILab_000004_depth.psd": {
+      "ignore_psd": true,
+      "label": "depth_map",
+      "note": "Depth/gray map companion file, not RGB part segmentation data."
+    },
+    "\u7acb\u3061\u7d75\u7d20\u6750\u306a\u4e2d\u56fd\u3046\u3055\u304e\u3055\u3093_ver.1.0/\u68eb\u506a\u594a\u617a\u5d7d\u5074\u62de\u5d19\u5046\u505d\u5053\u505d\u50ab_ver.1.0/\u61a6\u5a2b\u5091\u5059\u5072\u5e43\u68eb\u506a\u594a\u617a\u5d7d_\u62de\u5d19\u5046\u505d\u5053_ver.1.0\u4e6eim11211471\u4e6f.psd": {
+      "ignore_psd": true,
+      "label": "instruction_sheet",
+      "note": "Visible composite is a black readme/terms sheet rather than a clean character render."
+    },
+    "\u7acb\u7ed8/\u72fc.psd": {
+      "ignore_psd": true,
+      "label": "non_humanoid_illustration",
+      "note": "Pure non-humanoid illustration with decorative effects; useful only for a separate non-human taxonomy.",
+      "layers": [
+        {
+          "index": 1,
+          "ignore": true,
+          "label": "background",
+          "note": "Opaque background/canvas layer."
+        },
+        {
+          "index": 2,
+          "ignore": true,
+          "label": "empty",
+          "note": "No visible alpha."
+        },
+        {
+          "index": 3,
+          "ignore": true,
+          "label": "decor_wisp",
+          "note": "Pale gold decorative wisps and scattered paint marks."
+        },
+        {
+          "index": 4,
+          "ignore": true,
+          "label": "subtle_texture",
+          "note": "Very faint full-canvas texture/effect layer."
+        },
+        {
+          "index": 5,
+          "ignore": true,
+          "label": "decor_tail_or_smoke",
+          "note": "Large pale teal/beige decorative body-adjacent wash."
+        },
+        {
+          "index": 6,
+          "ignore": true,
+          "label": "non_humanoid_main_body",
+          "note": "Main blue body/head mass; excluded from the current humanoid part taxonomy."
+        },
+        {
+          "index": 7,
+          "ignore": true,
+          "label": "decor_swirl",
+          "note": "Small mint/pink decorative swirl strokes."
+        },
+        {
+          "index": 8,
+          "ignore": true,
+          "label": "body_fragment_or_shadow",
+          "note": "Detached dark blue and beige painted fragments."
+        },
+        {
+          "index": 9,
+          "ignore": true,
+          "label": "gold_markings",
+          "note": "Yellow/gold markings and small highlights."
+        },
+        {
+          "index": 10,
+          "ignore": true,
+          "label": "pale_highlight",
+          "note": "Pale highlight/shadow washes."
+        },
+        {
+          "index": 11,
+          "ignore": true,
+          "label": "colored_detail_strokes",
+          "note": "Red, blue, green, and black detail strokes."
+        },
+        {
+          "index": 12,
+          "ignore": true,
+          "label": "foliage_or_decor",
+          "note": "Green foliage-like decoration and a small brown mark."
+        },
+        {
+          "index": 13,
+          "ignore": true,
+          "label": "cyan_arc_effect",
+          "note": "Large pale cyan ribbon/arc strokes."
+        },
+        {
+          "index": 14,
+          "ignore": true,
+          "label": "small_decor_strokes",
+          "note": "Small yellow/pastel decorative strokes."
+        },
+        {
+          "index": 15,
+          "ignore": true,
+          "label": "fruit_and_dark_branch_decor",
+          "note": "Fruit-like props plus dark blue branch/antler-like strokes."
+        },
+        {
+          "index": 16,
+          "ignore": true,
+          "label": "blue_shadow_or_smoke",
+          "note": "Blue shadow/smoke wash and tiny decorations."
+        },
+        {
+          "index": 17,
+          "ignore": true,
+          "label": "sketch_line_art",
+          "note": "Broad sketch layer over the whole illustration."
+        },
+        {
+          "index": 18,
+          "ignore": true,
+          "label": "dark_detail_lines",
+          "note": "Dark blue line accents and detail strokes."
+        },
+        {
+          "index": 19,
+          "ignore": true,
+          "label": "colored_line_details",
+          "note": "Sparse colorful line details and highlights."
+        },
+        {
+          "index": 20,
+          "ignore": true,
+          "label": "colored_detail_lines",
+          "note": "Sparse red, blue, yellow, and dark detail lines."
+        },
+        {
+          "index": 21,
+          "ignore": true,
+          "label": "blue_detail_wash",
+          "note": "Light blue detail wash and line fragments."
+        },
+        {
+          "index": 22,
+          "ignore": true,
+          "label": "branch_or_constellation_decor",
+          "note": "Teal/purple branch-like decoration with round nodes."
+        },
+        {
+          "index": 23,
+          "ignore": true,
+          "label": "branch_or_constellation_outline",
+          "note": "Gold outline companion for the branch-like decoration."
+        },
+        {
+          "index": 24,
+          "ignore": true,
+          "label": "tiny_color_specks",
+          "note": "Tiny yellow, green, and red specks."
+        },
+        {
+          "index": 25,
+          "ignore": true,
+          "label": "glow_particles",
+          "note": "Small purple/orange glow particles."
+        },
+        {
+          "index": 26,
+          "ignore": true,
+          "label": "empty_inserted_image",
+          "note": "Inserted-image layer with no visible alpha."
+        }
+      ]
+    },
+    "\u7df4\u7fd2\u7528.psd": {
+      "ignore_psd": true,
+      "label": "instruction_sheet",
+      "note": "Visible composite is dominated by usage-rule text, so it is not a clean training image."
+    }
+  }
+}

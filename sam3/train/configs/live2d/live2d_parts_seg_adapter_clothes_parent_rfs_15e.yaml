@@ -1,0 +1,29 @@
+# @package _global_
+defaults:
+  - live2d_parts_seg_adapter_hair_merged_rfs_15e
+  - _self_
+
+# Clothing-focused fourth-pass candidate.
+# Keeps the hair-merged taxonomy and RFS split, then adds a parent `clothes`
+# supervision mask unioned from `upper clothes` and `lower clothes`. This gives
+# the model an easier whole-outfit target before asking it to split garments.
+
+paths:
+  experiment_log_dir: D:/github/sam3/runs/live2d_parts_seg_adapter_clothes_parent_rfs_15e
+  live2d_root: D:/github/sam3/dataset/live2d_parts_canonical_hair_merged_clothes_parent_rfs
+
+scratch:
+  max_data_epochs: 15
+  scheduler_timescale: 15
+  scheduler_warmup: 3
+  scheduler_cooldown: 3
+
+trainer:
+  max_epochs: ${scratch.max_data_epochs}
+  val_epoch_freq: 5
+
+  checkpoint:
+    save_freq: 5
+
+launcher:
+  experiment_log_dir: ${paths.experiment_log_dir}

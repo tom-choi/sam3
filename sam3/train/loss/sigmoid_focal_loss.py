@@ -5,9 +5,37 @@
 """Triton kernel for faster and memory efficient sigmoid focal loss"""
 
 import torch
-import triton
-import triton.language as tl
-from torch._inductor.runtime.triton_helpers import libdevice
+import torch.nn.functional as F
+
+try:
+    import triton
+    import triton.language as tl
+    from torch._inductor.runtime.triton_helpers import libdevice
+
+    TRITON_AVAILABLE = True
+except ModuleNotFoundError:  # pragma: no cover - depends on local accelerator stack.
+    TRITON_AVAILABLE = False
+
+    class _TritonStub:
+        @staticmethod
+        def jit(fn):
+            return fn
+
+        @staticmethod
+        def cdiv(x, y):
+            return (x + y - 1) // y
+
+    class _TLStub:
+        constexpr = int
+
+    class _LibDeviceStub:
+        @staticmethod
+        def pow(x, y):
+            return x**y
+
+    triton = _TritonStub()
+    tl = _TLStub()
+    libdevice = _LibDeviceStub()
 
 """
 
@@ -259,7 +287,20 @@ class SigmoidFocalLoss(torch.autograd.Function):
         return grad_inputs.view(input_shape), None, None, None
 
 
-triton_sigmoid_focal_loss = SigmoidFocalLoss.apply
+def _torch_sigmoid_focal_loss(inputs, targets, alpha=0.25, gamma=2):
+    prob = inputs.sigmoid()
+    ce_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction="none")
+    p_t = prob * targets + (1 - prob) * (1 - targets)
+    loss = ce_loss * ((1 - p_t) ** gamma)
+    if alpha >= 0:
+        alpha_t = alpha * targets + (1 - alpha) * (1 - targets)
+        loss = alpha_t * loss
+    return loss
+
+
+triton_sigmoid_focal_loss = (
+    SigmoidFocalLoss.apply if TRITON_AVAILABLE else _torch_sigmoid_focal_loss
+)
 
 
 class SigmoidFocalLossReduced(torch.autograd.Function):
@@ -320,4 +361,12 @@ class SigmoidFocalLossReduced(torch.autograd.Function):
         return grad_inputs.view(input_shape), None, None, None
 
 
-triton_sigmoid_focal_loss_reduce = SigmoidFocalLossReduced.apply
+def _torch_sigmoid_focal_loss_reduce(inputs, targets, alpha=0.25, gamma=2):
+    return _torch_sigmoid_focal_loss(inputs, targets, alpha, gamma).sum()
+
+
+triton_sigmoid_focal_loss_reduce = (
+    SigmoidFocalLossReduced.apply
+    if TRITON_AVAILABLE
+    else _torch_sigmoid_focal_loss_reduce
+)

@@ -1,0 +1,91 @@
+{
+  "input_root": "dataset\\live2d_parts_canonical_hair_merged_rfs",
+  "output_root": "dataset\\live2d_parts_canonical_hair_merged_clothes_parent_rfs",
+  "parent_name": "clothes",
+  "child_names": [
+    "upper clothes",
+    "lower clothes"
+  ],
+  "splits": {
+    "train": {
+      "added_parent_annotations": 19,
+      "images": 28,
+      "annotations": 332,
+      "categories": 21,
+      "annotation_counts": {
+        "mouth": 25,
+        "face": 24,
+        "eyes": 23,
+        "ears": 22,
+        "eyebrows": 21,
+        "hair": 21,
+        "neck": 20,
+        "arms": 19,
+        "clothes": 19,
+        "legs": 19,
+        "upper clothes": 17,
+        "accessory": 16,
+        "torso": 14,
+        "nose": 13,
+        "tail": 12,
+        "iris": 11,
+        "shoes": 10,
+        "cheek": 8,
+        "lower clothes": 8,
+        "hands": 7,
+        "feet": 3
+      }
+    },
+    "val": {
+      "added_parent_annotations": 1,
+      "images": 2,
+      "annotations": 24,
+      "categories": 21,
+      "annotation_counts": {
+        "eyebrows": 2,
+        "eyes": 2,
+        "face": 2,
+        "hair": 2,
+        "mouth": 2,
+        "torso": 2,
+        "accessory": 1,
+        "arms": 1,
+        "cheek": 1,
+        "clothes": 1,
+        "ears": 1,
+        "hands": 1,
+        "iris": 1,
+        "legs": 1,
+        "lower clothes": 1,
+        "neck": 1,
+        "nose": 1,
+        "upper clothes": 1
+      }
+    },
+    "test": {
+      "added_parent_annotations": 1,
+      "images": 2,
+      "annotations": 21,
+      "categories": 21,
+      "annotation_counts": {
+        "arms": 2,
+        "ears": 2,
+        "face": 2,
+        "legs": 2,
+        "clothes": 1,
+        "eyebrows": 1,
+        "eyes": 1,
+        "feet": 1,
+        "hair": 1,
+        "hands": 1,
+        "iris": 1,
+        "lower clothes": 1,
+        "mouth": 1,
+        "neck": 1,
+        "tail": 1,
+        "torso": 1,
+        "upper clothes": 1
+      }
+    }
+  }
+}

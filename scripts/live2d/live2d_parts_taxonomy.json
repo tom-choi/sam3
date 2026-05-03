@@ -1,0 +1,258 @@
+{
+  "version": 2,
+  "description": "Live2D character part taxonomy for SAM3 concept segmentation. Category ids 1-30 preserve the original MVP taxonomy; appended ids cover generic/combined humanoid layers that do not encode left/right or front/back semantics.",
+  "categories": [
+    {
+      "id": 1,
+      "name": "face",
+      "aliases": ["face", "head", "skin_face", "face skin", "base face", "顔", "顔面", "頭", "脸", "臉", "面部"],
+      "patterns": ["\\bface\\b", "\\bhead\\b", "\\bskin[ _-]*face\\b", "\\bface[ _-]*skin\\b", "顔|顔面|頭|脸|臉|面部"]
+    },
+    {
+      "id": 2,
+      "name": "neck",
+      "aliases": ["neck", "首", "首元", "脖子"],
+      "patterns": ["\\bneck\\b", "首元|首|脖子"]
+    },
+    {
+      "id": 3,
+      "name": "mouth",
+      "aliases": ["mouth", "lip", "lips", "open mouth", "inner mouth", "口", "口内", "嘴", "嘴巴"],
+      "patterns": ["\\bmouth\\b", "\\blips?\\b", "口|口内|嘴|嘴巴"]
+    },
+    {
+      "id": 4,
+      "name": "nose",
+      "aliases": ["nose", "鼻", "鼻子"],
+      "patterns": ["\\bnose\\b", "鼻|鼻子"]
+    },
+    {
+      "id": 5,
+      "name": "left ear",
+      "aliases": ["left ear", "ear left", "l ear", "ear_l", "左耳", "耳左"],
+      "patterns": ["\\b(left|l)[ _-]*ear\\b", "\\bear[ _-]*(left|l)\\b", "左耳|耳左"]
+    },
+    {
+      "id": 6,
+      "name": "right ear",
+      "aliases": ["right ear", "ear right", "r ear", "ear_r", "右耳", "耳右"],
+      "patterns": ["\\b(right|r)[ _-]*ear\\b", "\\bear[ _-]*(right|r)\\b", "右耳|耳右"]
+    },
+    {
+      "id": 7,
+      "name": "left eye",
+      "aliases": ["left eye", "eye left", "l eye", "eye_l", "左目", "目左", "左眼"],
+      "patterns": ["\\b(left|l)[ _-]*eye\\b", "\\beye[ _-]*(left|l)\\b", "左(目|眼)|(目|眼)左"]
+    },
+    {
+      "id": 8,
+      "name": "right eye",
+      "aliases": ["right eye", "eye right", "r eye", "eye_r", "右目", "目右", "右眼"],
+      "patterns": ["\\b(right|r)[ _-]*eye\\b", "\\beye[ _-]*(right|r)\\b", "右(目|眼)|(目|眼)右"]
+    },
+    {
+      "id": 9,
+      "name": "left iris",
+      "aliases": ["left iris", "left pupil", "iris left", "pupil left", "l iris", "l pupil", "左瞳", "左瞳孔", "左眼珠"],
+      "patterns": ["\\b(left|l).*(iris|pupil)\\b", "\\b(iris|pupil).*(left|l)\\b", "左.*(瞳|瞳孔|眼珠)|(瞳|瞳孔|眼珠).*左"]
+    },
+    {
+      "id": 10,
+      "name": "right iris",
+      "aliases": ["right iris", "right pupil", "iris right", "pupil right", "r iris", "r pupil", "右瞳", "右瞳孔", "右眼珠"],
+      "patterns": ["\\b(right|r).*(iris|pupil)\\b", "\\b(iris|pupil).*(right|r)\\b", "右.*(瞳|瞳孔|眼珠)|(瞳|瞳孔|眼珠).*右"]
+    },
+    {
+      "id": 11,
+      "name": "left eye highlight",
+      "aliases": ["left eye highlight", "highlight left eye", "left catchlight", "l highlight", "左目ハイライト", "左眼高光"],
+      "patterns": ["\\b(left|l).*(highlight|catchlight)\\b", "\\b(highlight|catchlight).*(left|l)\\b", "左.*(ハイライト|高光)|(ハイライト|高光).*左"]
+    },
+    {
+      "id": 12,
+      "name": "right eye highlight",
+      "aliases": ["right eye highlight", "highlight right eye", "right catchlight", "r highlight", "右目ハイライト", "右眼高光"],
+      "patterns": ["\\b(right|r).*(highlight|catchlight)\\b", "\\b(highlight|catchlight).*(right|r)\\b", "右.*(ハイライト|高光)|(ハイライト|高光).*右"]
+    },
+    {
+      "id": 13,
+      "name": "left eyebrow",
+      "aliases": ["left eyebrow", "eyebrow left", "l brow", "brow_l", "左眉", "眉左"],
+      "patterns": ["\\b(left|l)[ _-]*(eye)?brow\\b", "\\b(eye)?brow[ _-]*(left|l)\\b", "左眉|眉左|眉毛.*\\bzm\\b|\\bzm\\b.*眉毛"]
+    },
+    {
+      "id": 14,
+      "name": "right eyebrow",
+      "aliases": ["right eyebrow", "eyebrow right", "r brow", "brow_r", "右眉", "眉右"],
+      "patterns": ["\\b(right|r)[ _-]*(eye)?brow\\b", "\\b(eye)?brow[ _-]*(right|r)\\b", "右眉|眉右|眉毛.*\\bym\\b|\\bym\\b.*眉毛"]
+    },
+    {
+      "id": 15,
+      "name": "front hair",
+      "aliases": ["front hair", "bangs", "fringe", "maegami", "hair front", "front l", "front r", "前髪", "前发", "前髮", "刘海", "瀏海"],
+      "patterns": ["\\b(front[ _-]*hair|hair[ _-]*front|bangs|fringe)\\b", "\\bfront[ _-]*(left|right|l|r)?\\b", "前(髪|发|髮)|刘海|瀏海"]
+    },
+    {
+      "id": 16,
+      "name": "left side hair",
+      "aliases": ["left side hair", "side hair left", "l side hair", "hair side l", "左横髪", "左側髪", "左侧发"],
+      "patterns": ["\\b(left|l).*(side[ _-]*hair|hair[ _-]*side)\\b", "\\b(side[ _-]*hair|hair[ _-]*side).*(left|l)\\b", "\\bhair.*\\b(left|l)\\b", "\\b(left|l)\\b.*\\bhair\\b", "左.*(横髪|側髪|侧发|鬓发)|(横髪|側髪|侧发|鬓发).*左"]
+    },
+    {
+      "id": 17,
+      "name": "right side hair",
+      "aliases": ["right side hair", "side hair right", "r side hair", "hair side r", "右横髪", "右側髪", "右侧发"],
+      "patterns": ["\\b(right|r).*(side[ _-]*hair|hair[ _-]*side)\\b", "\\b(side[ _-]*hair|hair[ _-]*side).*(right|r)\\b", "\\bhair.*\\b(right|r)\\b", "\\b(right|r)\\b.*\\bhair\\b", "右.*(横髪|側髪|侧发|鬓发)|(横髪|側髪|侧发|鬓发).*右"]
+    },
+    {
+      "id": 18,
+      "name": "back hair",
+      "aliases": ["back hair", "rear hair", "hair back", "ponytail", "pony", "ushirogami", "後髪", "後ろ髪", "后发", "後髮"],
+      "patterns": ["\\b(back[ _-]*hair|rear[ _-]*hair|hair[ _-]*back|ponytail|pony)\\b", "後ろ?髪|后发|後髮"]
+    },
+    {
+      "id": 19,
+      "name": "ahoge",
+      "aliases": ["ahoge", "hair antenna", "antenna hair", "アホ毛", "呆毛"],
+      "patterns": ["\\bahoge\\b", "\\bantenna[ _-]*hair\\b", "アホ毛|呆毛"]
+    },
+    {
+      "id": 20,
+      "name": "upper clothes",
+      "aliases": ["upper clothes", "shirt", "jacket", "coat", "uniform", "dress top", "outer coat", "服上", "上衣", "衣服", "制服", "外套", "上半身服", "襟"],
+      "patterns": ["\\b(upper[ _-]*clothes|shirt|jacket|coat|uniform|dress[ _-]*top)\\b", "服上|上衣|衣服|制服|外套|トップス|上半身.*服|襟"]
+    },
+    {
+      "id": 21,
+      "name": "lower clothes",
+      "aliases": ["lower clothes", "skirt", "pants", "shorts", "dress bottom", "服下", "裙", "裙子", "裤", "褲"],
+      "patterns": ["\\b(lower[ _-]*clothes|skirt|pants|shorts|dress[ _-]*bottom)\\b", "服下|裙子?|裤|褲|ズボン|スカート"]
+    },
+    {
+      "id": 22,
+      "name": "left sleeve",
+      "aliases": ["left sleeve", "sleeve left", "l sleeve", "袖左", "左袖"],
+      "patterns": ["\\b(left|l)[ _-]*sleeve\\b", "\\bsleeve[ _-]*(left|l)\\b", "左袖|袖左"]
+    },
+    {
+      "id": 23,
+      "name": "right sleeve",
+      "aliases": ["right sleeve", "sleeve right", "r sleeve", "袖右", "右袖"],
+      "patterns": ["\\b(right|r)[ _-]*sleeve\\b", "\\bsleeve[ _-]*(right|r)\\b", "右袖|袖右"]
+    },
+    {
+      "id": 24,
+      "name": "left arm",
+      "aliases": ["left arm", "arm left", "l arm", "腕左", "左腕", "左臂"],
+      "patterns": ["\\b(left|l)[ _-]*arm\\b", "\\barm[ _-]*(left|l)\\b", "左(腕|臂|胳膊)|(腕|臂|胳膊)左"]
+    },
+    {
+      "id": 25,
+      "name": "right arm",
+      "aliases": ["right arm", "arm right", "r arm", "腕右", "右腕", "右臂"],
+      "patterns": ["\\b(right|r)[ _-]*arm\\b", "\\barm[ _-]*(right|r)\\b", "右(腕|臂|胳膊)|(腕|臂|胳膊)右"]
+    },
+    {
+      "id": 26,
+      "name": "left hand",
+      "aliases": ["left hand", "hand left", "l hand", "手左", "左手"],
+      "patterns": ["\\b(left|l)[ _-]*hand\\b", "\\bhand[ _-]*(left|l)\\b", "左手|手左"]
+    },
+    {
+      "id": 27,
+      "name": "right hand",
+      "aliases": ["right hand", "hand right", "r hand", "手右", "右手"],
+      "patterns": ["\\b(right|r)[ _-]*hand\\b", "\\bhand[ _-]*(right|r)\\b", "右手|手右"]
+    },
+    {
+      "id": 28,
+      "name": "left leg",
+      "aliases": ["left leg", "leg left", "l leg", "足左", "脚左", "左足", "左脚"],
+      "patterns": ["\\b(left|l)[ _-]*leg\\b", "\\bleg[ _-]*(left|l)\\b", "左(足|脚|腿)|(足|脚|腿)左"]
+    },
+    {
+      "id": 29,
+      "name": "right leg",
+      "aliases": ["right leg", "leg right", "r leg", "足右", "脚右", "右足", "右脚"],
+      "patterns": ["\\b(right|r)[ _-]*leg\\b", "\\bleg[ _-]*(right|r)\\b", "右(足|脚|腿)|(足|脚|腿)右"]
+    },
+    {
+      "id": 30,
+      "name": "accessory",
+      "aliases": ["accessory", "accessories", "ribbon", "bow", "hair clip", "hat", "cap", "glasses", "wing", "weapon", "umbrella", "parasol", "bell", "アクセ", "リボン", "飾り", "装飾", "裝飾", "帽子", "油纸伞", "油紙傘", "傘", "伞", "翅膀", "武器", "铃铛", "鈴鐺", "鈴", "发卡", "髮卡", "額飾", "头饰", "頭飾"],
+      "patterns": ["\\b(accessor(y|ies)|ribbon|bow|hair[ _-]*clip|hat|cap|glasses|wing|weapon|umbrella|parasol|bell)\\b", "アクセ|リボン|飾り|装飾|裝飾|帽子|油纸伞|油紙傘|傘|伞|翅膀|武器|铃铛|鈴鐺|鈴|发卡|髮卡|额饰|額飾|头饰|頭飾|星|花|ぬいぐるみ"]
+    },
+    {
+      "id": 31,
+      "name": "hair",
+      "aliases": ["hair", "full hair", "髪", "髪透過", "头发", "頭髮", "頭发"],
+      "patterns": ["\\bhair\\b", "髪透過|!髪|髪|头发|頭髮|頭发"]
+    },
+    {
+      "id": 32,
+      "name": "eyes",
+      "aliases": ["eyes", "both eyes", "目", "眼"],
+      "patterns": ["\\beyes\\b", "!目|\\beye\\b|目|眼"]
+    },
+    {
+      "id": 33,
+      "name": "eyebrows",
+      "aliases": ["eyebrows", "brows", "眉", "眉毛"],
+      "patterns": ["\\b(eye)?brows\\b", "眉毛|眉"]
+    },
+    {
+      "id": 34,
+      "name": "cheek",
+      "aliases": ["cheek", "cheeks", "blush", "チーク", "頬", "脸红", "臉紅", "赤面"],
+      "patterns": ["\\b(cheeks?|blush)\\b", "チーク|頬|脸红|臉紅|赤面"]
+    },
+    {
+      "id": 35,
+      "name": "hands",
+      "aliases": ["hands", "both hands", "手"],
+      "patterns": ["\\bhands\\b", "手塗|手線|手線画|\\bhand\\b|手"]
+    },
+    {
+      "id": 36,
+      "name": "arms",
+      "aliases": ["arms", "both arms", "腕", "胳膊", "手臂"],
+      "patterns": ["\\barms\\b", "腕塗|腕線|腕線画|\\barm\\b|腕|胳膊|手臂"]
+    },
+    {
+      "id": 37,
+      "name": "feet",
+      "aliases": ["feet", "foot", "toes", "足", "脚"],
+      "patterns": ["\\b(feet|foot|toes?)\\b", "足塗|足線|足線画|足|脚"]
+    },
+    {
+      "id": 38,
+      "name": "legs",
+      "aliases": ["legs", "leg", "thigh", "thighs", "calf", "calves", "knee", "ふくらはぎ", "太もも", "腿"],
+      "patterns": ["\\b(legs?|thighs?|calves|calf|knees?)\\b", "ふくらはぎ|太もも|腿|膝"]
+    },
+    {
+      "id": 39,
+      "name": "shoes",
+      "aliases": ["shoes", "shoe", "boots", "boot", "靴", "鞋"],
+      "patterns": ["\\b(shoes?|boots?)([^/]*)\\b", "靴[^/]*|鞋[^/]*"]
+    },
+    {
+      "id": 40,
+      "name": "tail",
+      "aliases": ["tail", "tails", "しっぽ", "尻尾", "尾巴", "拖尾"],
+      "patterns": ["\\b(body\\s*/\\s*)?tails?\\b", "しっぽ|尻尾|尾巴|拖尾|しっぽ塗|しっぽ線画"]
+    },
+    {
+      "id": 41,
+      "name": "torso",
+      "aliases": ["torso", "body", "body base", "skin", "body skin", "身体", "胴体", "躯干", "身體", "皮肤", "肌", "鎖骨", "锁骨"],
+      "patterns": ["\\btorso\\b", "\\bskin\\b", "\\bbody[ _-]*(base|color|shade|line|skin)?\\b", "身体|身體|胴体|躯干|皮肤|肌|デコルテ|胸|腰|股|鎖骨|锁骨|(?:^| / )体(?: / |$)"]
+    },
+    {
+      "id": 42,
+      "name": "ears",
+      "aliases": ["ears", "ear", "animal ears", "kemomimi", "けもみみ", "ケモミミ", "獣耳", "獸耳", "耳"],
+      "patterns": ["\\bears?\\b", "\\banimal[ _-]*ears?\\b", "\\bkemomimi\\b", "けもみみ|ケモミミ|獣耳|獸耳|耳"]
+    }
+  ]
+}
