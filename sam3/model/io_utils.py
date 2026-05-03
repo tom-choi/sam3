@@ -7,7 +7,9 @@ import os
 import queue
 import re
 import time
+import types
 from threading import Condition, get_ident, Lock, Thread
+from typing import Any, Optional, Union
 
 import numpy as np
 import torch
@@ -27,14 +29,14 @@ VIDEO_EXTS = [".mp4", ".mov", ".avi", ".mkv", ".webm"]
 
 
 def load_resource_as_video_frames(
-    resource_path,
-    image_size,
-    offload_video_to_cpu,
-    img_mean=(0.5, 0.5, 0.5),
-    img_std=(0.5, 0.5, 0.5),
-    async_loading_frames=False,
-    video_loader_type="cv2",
-):
+    resource_path: Union[str, list],
+    image_size: int,
+    offload_video_to_cpu: bool,
+    img_mean: tuple[float, float, float] = (0.5, 0.5, 0.5),
+    img_std: tuple[float, float, float] = (0.5, 0.5, 0.5),
+    async_loading_frames: bool = False,
+    video_loader_type: str = "cv2",
+) -> tuple[Any, int, int]:
     """
     Load video frames from either a video or an image (as a single-frame video).
     Alternatively, if input is a list of PIL images, convert its format
@@ -91,12 +93,12 @@ def load_resource_as_video_frames(
 
 
 def load_image_as_single_frame_video(
-    image_path,
-    image_size,
-    offload_video_to_cpu,
-    img_mean=(0.5, 0.5, 0.5),
-    img_std=(0.5, 0.5, 0.5),
-):
+    image_path: str,
+    image_size: int,
+    offload_video_to_cpu: bool,
+    img_mean: tuple[float, float, float] = (0.5, 0.5, 0.5),
+    img_std: tuple[float, float, float] = (0.5, 0.5, 0.5),
+) -> tuple[torch.Tensor, int, int]:
     """Load an image as a single-frame video."""
     images, image_height, image_width = _load_img_as_tensor(image_path, image_size)
     images = images.unsqueeze(0).half()
@@ -468,7 +470,7 @@ class TorchCodecDecoder:
     def __len__(self) -> int:
         return self._num_frames
 
-    def __getitem__(self, key: int):
+    def __getitem__(self, key: int) -> torch.Tensor:
         from torchcodec import _core as core
 
         if key < 0:
@@ -492,7 +494,7 @@ class FIFOLock:
         self._waiters = queue.Queue()
         self._condition = Condition()
 
-    def acquire(self):
+    def acquire(self) -> None:
         ident = get_ident()
         with self._condition:
             self._waiters.put(ident)
@@ -511,7 +513,12 @@ class FIFOLock:
     def __enter__(self):
         self.acquire()
 
-    def __exit__(self, t, v, tb):
+    def __exit__(
+        self,
+        t: Optional[type[BaseException]],
+        v: Optional[BaseException],
+        tb: Optional[types.TracebackType],
+    ) -> None:
         self.release()
 
 
